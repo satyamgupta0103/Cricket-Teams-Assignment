@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// This is a bug fix
+// This is xyz  a bug (fetch API hook) fix
 export const fetchAPI = async (apiUrl, cancelToken) => {
   const response = await axios.get(apiUrl, {
     cancelToken: cancelToken?.token,
