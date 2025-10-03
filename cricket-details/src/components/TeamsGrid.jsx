@@ -13,12 +13,19 @@ import Stack from "@mui/material/Stack";
 
 const TeamsGrid = ({ props }) => {
   const { searchValue } = props;
+  const [page, setPage] = useState(1);
 
   const { teams, loading, error } = useCricketTeams(
     "https://api.balldontlie.io/v1/teams/"
   );
 
-  console.log(teams);
+  const selectPageHandler = (selectedPage) => {
+    if (selectedPage >= 1 && selectedPage <= teams.length / 5) {
+      setPage(selectedPage);
+    }
+  };
+
+  // console.log(teams);
   if (loading) {
     return <div>Loading Teams....</div>;
   }
@@ -29,17 +36,9 @@ const TeamsGrid = ({ props }) => {
   return (
     <div>
       <h2>NBL Teams</h2>
-      {/* <ul>
-        {Array.isArray(teams) &&
-          teams.map((team) => (
-            <li key={team.id}>
-              {team.full_name} ({team.abbreviation})
-            </li>
-          ))}
-      </ul> */}
 
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 600 }} aria-label="simple table">
+        <Table sx={{ minWidth: 400 }} aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell align="center">Team Name</TableCell>
@@ -51,7 +50,7 @@ const TeamsGrid = ({ props }) => {
           </TableHead>
           <TableBody>
             {Array.isArray(teams) &&
-              teams.map((team) => (
+              teams.slice(page * 5 - 5, page * 5).map((team) => (
                 <TableRow
                   key={team.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -68,6 +67,30 @@ const TeamsGrid = ({ props }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      <div className="pagination">
+        <span
+          onClick={() => selectPageHandler(page - 1)}
+          className={page > 1 ? "" : "pagination__disabled"}
+        >
+          ◀
+        </span>
+        {[...Array(teams.length / 5)].map((_, i) => {
+          return (
+            <span
+              className={page === i + 1 ? "pagination__selected" : ""}
+              onClick={() => selectPageHandler(i + 1)}
+            >
+              {i + 1}
+            </span>
+          );
+        })}
+        <span
+          onClick={() => selectPageHandler(page + 1)}
+          className={page < teams.length / 5 ? "" : "pagination__disabled"}
+        >
+          ▶
+        </span>
+      </div>
     </div>
   );
 };
