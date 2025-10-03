@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import fetchAPI from "../API";
+import { fetchAPI } from "../API";
 
 const useCricketTeams = (apiUrl) => {
   const [teams, setTeams] = useState([]);
@@ -15,9 +15,9 @@ const useCricketTeams = (apiUrl) => {
         setLoading(true);
         cancelToken = axios.CancelToken.source();
 
-        const response = fetchAPI(apiUrl, cancelToken);
+        const response = await fetchAPI(apiUrl, cancelToken);
 
-        setTeams(response.data || []);
+        setTeams(response.data.data || []);
         setError(null);
       } catch (error) {
         if (axios.isCancel(error)) {
