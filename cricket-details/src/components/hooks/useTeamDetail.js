@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import fetchAPI from "../API";
+import { fetchAPI } from "../API";
 
 const useTeamDetail = (apiURL) => {
   const [teamDetail, setTeamDetail] = useState([]);
